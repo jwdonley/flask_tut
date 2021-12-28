@@ -1,4 +1,5 @@
 from flask import Flask
+from flask import render_template
 from flask import request
 from flask import url_for
 from markupsafe import escape
@@ -31,8 +32,17 @@ def show_subpath(subpath):
     # show the subpath after /path/
     return f'Subpath {escape(subpath)}'
 
+@app.route('/hello/')
+@app.route('/hello/<name>')
+def hello(name=None):
+    return render_template('hello.html', name=name)
+
 with app.test_request_context():
     print(url_for('hello_world'))
     print(url_for('login'))
     print(url_for('login', next='/'))
     print(url_for('profile', username='John Doe'))
+    print(url_for('static', filename='style.css'))
+    # now you can do something with the request until the
+    # end of the with block, such as basic assertions:
+    assert 1 == 1
